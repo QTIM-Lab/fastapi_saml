@@ -8,7 +8,8 @@ poetry init
 ```
 
 ```bash
-fastapi dev main.py
+fastapi dev main.py # dev
+python main.py # prod
 ```
 
 
