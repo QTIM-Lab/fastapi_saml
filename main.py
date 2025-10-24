@@ -1,9 +1,8 @@
 """
 Main FastAPI application with SAML authentication
 """
-import os, uvicorn
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+import uvicorn
+from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 
 from config import SESSION_SECRET_KEY
@@ -12,6 +11,7 @@ from routers import saml, protected, public
 
 app = FastAPI(title="FastAPI SAML SSO Demo")
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
+
 
 # Include routers
 app.include_router(saml.router)
