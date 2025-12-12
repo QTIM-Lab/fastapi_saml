@@ -1,11 +1,42 @@
 """
 SAML authentication routes
 """
-from fastapi import APIRouter, Request
+import pdb
+from fastapi import APIRouter, Request, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from utils.saml_helpers import init_saml_auth, prepare_fastapi_request
+from config import DEBUG
 
 router = APIRouter(prefix="/saml", tags=["saml"])
+
+
+@router.get("/validate")
+async def validate(request: Request):
+    """
+    Endpoint for nginx auth_request
+    Returns 200 if user is authenticated, 401 if not
+    """
+    # Check if session contains SAML authentication data
+    saml_name_id = request.session.get('samlNameId')
+    saml_userdata = request.session.get('samlUserdata')
+    # pdb.set_trace()
+    # request.session.clear()
+    if saml_name_id:
+        if saml_userdata:
+            # User is authenticated - return user info in headers
+            email = saml_userdata.get('email', [''])[0] if saml_userdata.get('email') else ''
+            name = saml_userdata.get('name', [''])[0] if saml_userdata.get('name') else ''
+        
+        return Response(
+            status_code=200,
+            headers={
+                "X-User-Email": email if email else "",
+                "X-User-Name": name if name else "",
+                "X-User-NameId": saml_name_id
+            }
+        )
+    return Response(status_code=401)
+
 
 @router.get("/login")
 async def saml_login(request: Request):
@@ -16,6 +47,25 @@ async def saml_login(request: Request):
     # Redirect to Okta for authentication
     sso_url = auth.login()
     return RedirectResponse(url=sso_url)
+
+
+# Same as logout basically...merge
+@router.get("/clear_session")
+async def validate(request: Request):
+    """
+    Test endpoint to clear session
+    """
+    # pdb.set_trace()
+    request.session.clear()
+    return Response(
+        status_code=200,
+        headers={
+            "X-User-Email": "unset",
+            "X-User-Name": "unset",
+            "X-User-NameId": "unset"
+        }
+    )
+
 
 
 @router.get("/logout")
@@ -176,7 +226,28 @@ async def saml_acs(request: Request):
         </body>
         </html>
         """
-        return HTMLResponse(content=html_content)
+        # pdb.set_trace()
+        if DEBUG == 'True':
+            return HTMLResponse(content=html_content)
+        else:
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>New Page Test</title>
+                <style>
+                </style>
+            </head>
+            <body>
+                <h1>New Page Test!</h1>
+            </body>
+            </html>
+            """
+            # return HTMLResponse(content=html_content)
+
+            return RedirectResponse(url='/protected', status_code=303)
+
+            
     else:
         error_msg = ", ".join(errors)
         error_reason = auth.get_last_error_reason()

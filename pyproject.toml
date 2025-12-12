@@ -1,19 +1,17 @@
-[project]
+[tool.poetry]
 name = "fastapi-saml"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "bbearce",email = "bbearce@gmail.com"}
-]
+authors = ["bbearce <bbearce@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "fastapi[standard] (>=0.119.0,<0.120.0)",
-    "python3-saml (>=1.16.0,<2.0.0)",
-    "itsdangerous (>=2.2.0,<3.0.0)",
-    "python-dotenv (>=1.1.1,<2.0.0)"
-]
 
+[tool.poetry.dependencies]
+python = ">=3.10"
+fastapi = {extras = ["standard"], version = ">=0.119.0,<0.120.0"}
+python3-saml = ">=1.16.0,<2.0.0"
+itsdangerous = ">=2.2.0,<3.0.0"
+python-dotenv = ">=1.1.1,<2.0.0"
+uvicorn = "^0.38.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

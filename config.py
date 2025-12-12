@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv() 
 
+DEBUG = os.getenv("debug", "False")
 sp_entityId = os.getenv("sp_entityId")
 sp_assertionConsumerService = os.getenv("sp_assertionConsumerService")
 sp_singleLogoutService = os.getenv("sp_singleLogoutService")
@@ -14,11 +15,13 @@ idp_singleLogoutService = os.getenv("idp_singleLogoutService")
 idp_x509cert = os.getenv("idp_x509cert")
 # import pdb; pdb.set_trace()
 
+
+
 SESSION_SECRET_KEY = "your-secret-key-change-in-production"
 
 SAML_SETTINGS = {
     "strict": False,  # Set to True in production
-    "debug": True,
+    "debug": True if DEBUG == "True" else False,
     "sp": {
         "entityId": sp_entityId,
         "assertionConsumerService": {

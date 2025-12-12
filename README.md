@@ -4,7 +4,7 @@
 ## FastAPI
 ```bash
 pyenv activate fastapi_saml
-poetry init
+poetry install
 ```
 
 ```bash
