@@ -1,16 +1,29 @@
 """
 Main FastAPI application with SAML authentication
 """
+import os
+import pdb
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.staticfiles import StaticFiles
+
 
 from config import SESSION_SECRET_KEY
 from routers import saml, protected, public
+from dotenv import load_dotenv
 
 
-app = FastAPI(title="FastAPI SAML SSO Demo")
-app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
+load_dotenv()
+root_path = os.getenv("root_path")
+
+app = FastAPI(title="FastAPI SAML SSO Demo", root_path=root_path)
+app.add_middleware(SessionMiddleware,
+                   secret_key=SESSION_SECRET_KEY,
+                   same_site="lax",
+                   https_only=False)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Include routers

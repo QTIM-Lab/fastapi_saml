@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .button-secondary {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <h1>✓ Login Successful!</h1>
+    <div class="success">
+        <strong>You have successfully authenticated via Okta SAML SSO</strong>
+    </div>
+    
+    <h3>User Information:</h3>
+    <pre>{{user_data}}</pre>
+    
+    <p>
+        <a href="{{root_path}}/" class="button button-secondary">← Back to Home</a>
+        <a href="{{root_path}}/protected" class="button button-secondary">View Protected Page</a>
+        <a href="{{root_path}}/saml/logout" class="button">Logout from Okta</a>
+    </p>
+</body>
+</html>

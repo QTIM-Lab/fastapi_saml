@@ -4,10 +4,13 @@ SAML authentication routes
 import pdb
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
+
 from utils.saml_helpers import init_saml_auth, prepare_fastapi_request
 from config import DEBUG
 
 router = APIRouter(prefix="/saml", tags=["saml"])
+templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/validate")
@@ -19,7 +22,6 @@ async def validate(request: Request):
     # Check if session contains SAML authentication data
     saml_name_id = request.session.get('samlNameId')
     saml_userdata = request.session.get('samlUserdata')
-    # pdb.set_trace()
     # request.session.clear()
     if saml_name_id:
         if saml_userdata:
@@ -41,11 +43,13 @@ async def validate(request: Request):
 @router.get("/login")
 async def saml_login(request: Request):
     """Initiate SAML SSO login - redirects to Okta"""
+    redirect_url = request.query_params.get("redirect", "/")
+
     req = prepare_fastapi_request(request)
     auth = init_saml_auth(req)
     
     # Redirect to Okta for authentication
-    sso_url = auth.login()
+    sso_url = auth.login(return_to=redirect_url)
     return RedirectResponse(url=sso_url)
 
 
@@ -55,7 +59,6 @@ async def validate(request: Request):
     """
     Test endpoint to clear session
     """
-    # pdb.set_trace()
     request.session.clear()
     return Response(
         status_code=200,
@@ -67,70 +70,13 @@ async def validate(request: Request):
     )
 
 
-
 @router.get("/logout")
 async def saml_logout(request: Request):
     """Simple logout - clears local session and provides Okta logout link"""
     request.session.clear()
+    root_path = request.scope.get("root_path", "")
     # In production, you'd clear the user's session here
-    
-    return HTMLResponse(content="""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Logged Out</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    max-width: 800px;
-                    margin: 50px auto;
-                    padding: 20px;
-                    text-align: center;
-                }
-                .success {
-                    background-color: #d4edda;
-                    color: #155724;
-                    padding: 15px;
-                    border-radius: 5px;
-                    margin: 20px 0;
-                }
-                .info {
-                    background-color: #d1ecf1;
-                    color: #0c5460;
-                    padding: 15px;
-                    border-radius: 5px;
-                    margin: 20px 0;
-                }
-                .button {
-                    background-color: #007bff;
-                    color: white;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    display: inline-block;
-                    margin: 10px 5px;
-                }
-            </style>
-        </head>
-        <body>
-            <h1>✓ Logged Out</h1>
-            <div class="success">
-                You have been logged out of this application.
-            </div>
-            <!--
-            <div class="info">
-                <p><strong>Note:</strong> You may still be logged into Okta.</p>
-                <p>To completely log out of Okta, click the button below:</p>
-                <a href="https://integrator-5479918.okta.com/login/signout" class="button" target="_blank">
-                    Log Out of Okta
-                </a>
-            </div>
-            -->
-            <p><a href="/">← Back to Home</a></p>
-        </body>
-        </html>
-    """)
-
+    return templates.TemplateResponse("logout.html", {"request": request, "root_path": root_path})
 
 
 @router.post("/acs")
@@ -145,6 +91,9 @@ async def saml_acs(request: Request):
     form_data = await request.form()
     req["post_data"] = dict(form_data)
     
+    # Get RelayState from the SAML response
+    relay_state = form_data.get("RelayState", "/protected")
+
     auth = init_saml_auth(req)
     auth.process_response()
     
@@ -170,84 +119,13 @@ async def saml_acs(request: Request):
         
         # In production, you'd create a session here
         # For demo, just show the user data
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Login Successful</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    max-width: 800px;
-                    margin: 50px auto;
-                    padding: 20px;
-                }}
-                .success {{
-                    background-color: #d4edda;
-                    color: #155724;
-                    padding: 15px;
-                    border-radius: 5px;
-                    margin: 20px 0;
-                }}
-                pre {{
-                    background-color: #f8f9fa;
-                    padding: 15px;
-                    border-radius: 5px;
-                    overflow-x: auto;
-                }}
-                .button {{
-                    background-color: #dc3545;
-                    color: white;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    display: inline-block;
-                    margin: 10px 5px;
-                }}
-                .button-secondary {{
-                    background-color: #6c757d;
-                }}
-            </style>
-        </head>
-        <body>
-            <h1>✓ Login Successful!</h1>
-            <div class="success">
-                <strong>You have successfully authenticated via Okta SAML SSO</strong>
-            </div>
-            
-            <h3>User Information:</h3>
-            <pre>{user_data}</pre>
-            
-            <p>
-                <a href="/" class="button button-secondary">← Back to Home</a>
-                <a href="/protected" class="button button-secondary">View Protected Page</a>
-                <a href="/saml/logout" class="button">Logout from Okta</a>
-            </p>
-        </body>
-        </html>
-        """
-        # pdb.set_trace()
         if DEBUG == 'True':
-            return HTMLResponse(content=html_content)
+            root_path = request.scope.get("root_path", "")
+            # In production, you'd clear the user's session here
+            return templates.TemplateResponse("acs.html", {"request": request, "root_path": root_path, "user_data": user_data})
         else:
-            html_content = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>New Page Test</title>
-                <style>
-                </style>
-            </head>
-            <body>
-                <h1>New Page Test!</h1>
-            </body>
-            </html>
-            """
-            # return HTMLResponse(content=html_content)
 
-            return RedirectResponse(url='/protected', status_code=303)
-
-            
+            return RedirectResponse(url=relay_state, status_code=303)     
     else:
         error_msg = ", ".join(errors)
         error_reason = auth.get_last_error_reason()
@@ -287,37 +165,8 @@ async def saml_sls(request: Request):
     # Check if there's actually a SAML logout request/response
     if 'SAMLRequest' not in request.query_params and 'SAMLResponse' not in request.query_params:
         # No SAML logout in progress, just show logged out page
-        return HTMLResponse(content="""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Logged Out</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        max-width: 800px;
-                        margin: 50px auto;
-                        padding: 20px;
-                        text-align: center;
-                    }
-                    .info {
-                        background-color: #d1ecf1;
-                        color: #0c5460;
-                        padding: 15px;
-                        border-radius: 5px;
-                        margin: 20px 0;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>✓ Logged Out</h1>
-                <div class="info">
-                    You have been logged out successfully.
-                </div>
-                <p><a href="/">← Back to Home</a></p>
-            </body>
-            </html>
-        """)
+        root_path = request.scope.get("root_path", "")
+        return templates.TemplateResponse("sls.html", {"request": request, "root_path": root_path})
     
     auth = init_saml_auth(req)
     
@@ -329,70 +178,10 @@ async def saml_sls(request: Request):
             if url is not None:
                 # Don't redirect if it's the same URL (prevents loop)
                 if '/saml/sls' in url:
-                    return HTMLResponse(content="""
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Logged Out</title>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    max-width: 800px;
-                                    margin: 50px auto;
-                                    padding: 20px;
-                                    text-align: center;
-                                }
-                                .success {
-                                    background-color: #d4edda;
-                                    color: #155724;
-                                    padding: 15px;
-                                    border-radius: 5px;
-                                    margin: 20px 0;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <h1>✓ Logged Out Successfully</h1>
-                            <div class="success">
-                                You have been logged out from Okta.
-                            </div>
-                            <p><a href="/">← Back to Home</a></p>
-                        </body>
-                        </html>
-                    """)
+                    return templates.TemplateResponse("sls.html", {"request": request, "root_path": root_path})
                 return RedirectResponse(url=url)
             else:
-                return HTMLResponse(content="""
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Logged Out</title>
-                        <style>
-                            body {
-                                font-family: Arial, sans-serif;
-                                max-width: 800px;
-                                margin: 50px auto;
-                                padding: 20px;
-                                text-align: center;
-                            }
-                            .success {
-                                background-color: #d4edda;
-                                color: #155724;
-                                padding: 15px;
-                                border-radius: 5px;
-                                margin: 20px 0;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>✓ Logged Out Successfully</h1>
-                        <div class="success">
-                            You have been logged out.
-                        </div>
-                        <p><a href="/">← Back to Home</a></p>
-                    </body>
-                    </html>
-                """)
+                return templates.TemplateResponse("sls.html", {"request": request, "root_path": root_path})
         else:
             return HTMLResponse(
                 content=f"<h1>Logout Error</h1><p>{', '.join(errors)}</p><p><a href='/'>Home</a></p>",
@@ -426,7 +215,7 @@ async def saml_sls(request: Request):
                 <body>
                     <h1>✓ Logged Out</h1>
                     <div class="info">
-                        You have been logged out locally.
+                        Technically there was an issue, you have been logged out locally (SLS).
                     </div>
                     <p><a href="/">← Back to Home</a></p>
                 </body>
