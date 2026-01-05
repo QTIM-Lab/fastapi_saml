@@ -2,28 +2,7 @@
 <html>
 <head>
     <title>FastAPI SAML SSO Demo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        .button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-        }
-        .info {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid #007bff;
-            margin: 20px 0;
-        }
-    </style>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <h1>FastAPI SAML SSO with Okta</h1>

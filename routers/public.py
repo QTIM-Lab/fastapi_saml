@@ -16,7 +16,13 @@ async def test_public():
     return {"message": "This is a public endpoint", "authentication": "not required"}
 
 
-@router.get("/")
+@router.get("/index")
 async def home(request: Request):
     root_path = request.scope.get("root_path", "")
     return templates.TemplateResponse("index.html", {"request": request, "root_path": root_path})
+
+
+@router.get("/")
+async def home(request: Request):
+    root_path = request.scope.get("root_path", "")
+    return templates.TemplateResponse("qtim_apps.html", {"request": request, "root_path": root_path})

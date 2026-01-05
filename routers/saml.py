@@ -28,7 +28,6 @@ async def validate(request: Request):
             # User is authenticated - return user info in headers
             email = saml_userdata.get('email', [''])[0] if saml_userdata.get('email') else ''
             name = saml_userdata.get('name', [''])[0] if saml_userdata.get('name') else ''
-        
         return Response(
             status_code=200,
             headers={

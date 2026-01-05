@@ -2,38 +2,7 @@
 <html>
 <head>
     <title>Logged Out</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 10px 5px;
-        }
-    </style>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <h1>✓ Logged Out</h1>
