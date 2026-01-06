@@ -104,55 +104,11 @@
   <header>QTIM CU Applications Gateway</header>
 
   <div class="container">
-    <h2>Available Applications</h2>
-    <p>Select an application to continue:</p>
+    <h2>Welcome {{ samlNameId }}</h2>
+    <h3>Select an application to continue:</h3>
 
     <div class="apps">
 
-      
-      <div class="card">
-        <h3>QTIM General Chatbot</h3>
-        <a href="/qtim_general_chatbot">Go to App</a>
-        <p>On L40</p>
-      </div>
-      
-      <div class="card">
-        <h3>QTIM Grant Chatbot</h3>
-        <a href="/qtim_grant_chatbot">Go to App</a>
-        <p>On L40</p>
-      </div>
-
-      <div class="card">
-        <h3>GA Segmentation_App</h3>
-        <a href="/ga_segmentation_app">Go to App</a>
-        <p>On Linux Tower 2</p>
-      </div>
-      
-      <div class="card">
-        <h3>CU AAI Dashboard</h3>
-        <a href="/cu_aai_dashboard">Go to App</a>
-        <p>On Linux Tower 1</p>
-      </div>
-
-      <div class="card">
-        <h3>OPTIMEyes</h3>
-        <a href="/optimeyes">Go to App</a>
-        <p>On Linux Tower 1</p>
-      </div>
-
-      <div class="card">
-        <h3>AMD Classifier App</h3>
-        <a href="/amd_classifier_app/">Go to App</a>
-        <p>On Linux Tower 2</p>
-      </div>
-
-      <div class="card">
-        <h3>L40 Test</h3>
-        <a href="/l40">Go To App</a>
-        <p>On L40</p>
-      </div>
-      
-    </div>
   </div>
 
   <footer>
@@ -160,5 +116,39 @@
   </footer>
 </body>
 
-</html>
+<script type="text/javascript">
+  apps = {{ apps_and_users | tojson }};
+  samlNameId = {{ samlNameId | tojson }};
+  function userInApp(app){
+    return apps[app]['users'].includes(samlNameId) ? true : false
+  }
+  // Need a list of apps to show based on user
 
+  filtered_items = Object.keys(apps).filter(userInApp)
+
+  // Dynamically add an app card if user has access
+  Object.keys(apps).forEach(function(app) {
+    debugger
+    if (userInApp(app)) {
+      console.log(`User has access to ${app}`);
+      // Here you can create and append the app card dynamically
+      const app_div = document.createElement('div');
+      app_div.className = 'card';
+      const header3 = document.createElement('h3');
+      header3.textContent = apps[app]['display_name'];
+      const a_tag = document.createElement('a');
+      a_tag.href = `/${app}`;
+      a_tag.textContent = "Go to App";
+      const p_tag_location = document.createElement('p');
+      p_tag_location.textContent = `Location: ${apps[app]['location']}`;
+      app_div.appendChild(header3);
+      app_div.appendChild(a_tag);
+      app_div.appendChild(p_tag_location);
+      document.querySelector('.apps').appendChild(app_div);
+    }
+  });
+  
+
+</script>
+
+</html>

@@ -2,9 +2,11 @@
 Configuration settings for SAML authentication
 """
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv() 
 
+# .env variables
 DEBUG = os.getenv("debug", "False")
 sp_entityId = os.getenv("sp_entityId")
 sp_assertionConsumerService = os.getenv("sp_assertionConsumerService")
@@ -13,9 +15,9 @@ idp_entityId = os.getenv("idp_entityId")
 idp_singleSignOnService = os.getenv("idp_singleSignOnService")
 idp_singleLogoutService = os.getenv("idp_singleLogoutService")
 idp_x509cert = os.getenv("idp_x509cert")
-# import pdb; pdb.set_trace()
 
-
+# apps and associated users
+apps_and_users = json.load(open("db/apps_and_users.json"))
 
 SESSION_SECRET_KEY = "your-secret-key-change-in-production"
 
