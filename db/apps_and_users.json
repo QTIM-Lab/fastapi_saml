@@ -1,9 +1,122 @@
 {
-  "some_application": {
+  "qtim_general_chatbot": {
     "users": [
-      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU"
+      "TRAVIS.REDD@CUANSCHUTZ.EDU",
+      "KIERAN.AGUIRRE@CUANSCHUTZ.EDU",
+      "LIUBOV.BRADFORD@CUANSCHUTZ.EDU",
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU"
     ],
-    "display_name": "Some Application",
-    "location": "Some Machine"
+    "display_name": "QTIM General Chatbot",
+    "location": "L40"
+},
+"qtim_grant_chatbot": {
+    "users": [
+      "TRAVIS.REDD@CUANSCHUTZ.EDU",
+      "KIERAN.AGUIRRE@CUANSCHUTZ.EDU",
+      "LIUBOV.BRADFORD@CUANSCHUTZ.EDU",
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "QTIM Grant Chatbot",
+    "location": "L40"
+  },
+"ophtho_summarizer": {
+    "users": [
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "OPH Note Summarizer",
+    "location": "L40"
+  },
+"oct_layer_seg": {
+    "users": [
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "NIRANJAN.MANOHARAN@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "OCT Layer Segmentation",
+    "location": "L40"
+  },
+  "ga_segmentation_app": {
+    "users": [
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "GA Segmentation App",
+    "location": "Linux Tower 2"
+  },
+  "optimeyes": {
+    "users": [
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU",
+      "RUSS.STEIL@CUANSCHUTZ.EDU",
+      "SCOTT.KINDER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "OPTIMEyes",
+    "location": "Linux Tower 1"
+  },
+  "aai_recruitment_dashboard": {
+    "users": [
+      "NARESH.MANDAVA@CUANSCHUTZ.EDU",
+      "NIRANJAN.MANOHARAN@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU",
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "SHENALI.URAGODA@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "FRANCISCO.ARISMENDI@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "AAI Recruitment Dashboard",
+    "location": "Linux Tower 1"
+  },
+  "cu_aai_dashboard": {
+    "users": [
+      "NIRANJAN.MANOHARAN@CUANSCHUTZ.EDU",
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU",
+      "SCOTT.KINDER@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "CU AAI Dashboard",
+    "location": "Linux Tower 1"
+  },
+  "amd_classifier_app": {
+    "users": [
+      "NIRANJAN.MANOHARAN@CUANSCHUTZ.EDU",
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU",
+      "RUSS.STEIL@CUANSCHUTZ.EDU",
+      "MAXWELL.MAYEDA@CUANSCHUTZ.EDU",
+      "SOUFIANE.AZARGUI@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "AMD Classifier App",
+    "location": "Linux Tower 2"
+  },
+  "l40": {
+    "users": [
+      "BENJAMIN.BEARCE@CUANSCHUTZ.EDU",
+      "STEVE.MCNAMARA@CUANSCHUTZ.EDU",
+      "GIACOMO.NEBBIA@CUANSCHUTZ.EDU",
+      "JAYASHREE.KALPATHY-CRAMER@CUANSCHUTZ.EDU",
+      "RUSS.STEIL@CUANSCHUTZ.EDU"
+    ],
+    "display_name": "L40 Test",
+    "location": "L40"
   }
 }

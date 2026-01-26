@@ -13,6 +13,13 @@ fastapi dev main.py # dev
 python main.py # prod
 ```
 
+Multiple user management with PIDs:
+```bash
+./run.sh # run `python main.py` with nohup and records PID
+./stop.sh # uses recorded PID to stop `python main.py`
+./restart.sh # stop.sh if we need to and then run.sh
+```
+
 ## SAML Workflow
 ![saml_guidance_saml_flow.png](saml_guidance_saml_flow.png)
 
